@@ -470,10 +470,6 @@ def _collect_closure_scalar_vals(func, visited_ids: Optional[Set[int]] = None) -
         if isinstance(val, (int, float, bool, str, type(None), tuple, enum.Enum)):
             vals.append(f"{name}={val!r}")
         elif isinstance(val, type):
-            # Captured classes specialize the cubin (fx.BFloat16 vs fx.Float16)
-            # and are not function objects, so the callable walk drops them.
-            # Use module.qualname, not repr: a metaclass __repr__ can embed an
-            # address and miss the disk cache across processes.
             vals.append(f"{name}={val.__module__}.{val.__qualname__}")
         else:
             # Recurse into callable deps (KernelFunction, JitFunction, plain functions)

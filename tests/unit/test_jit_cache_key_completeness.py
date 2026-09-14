@@ -429,7 +429,7 @@ def test_captured_dtype_class_reaches_the_cache_key():
     """A captured dtype class must change the cache key.
 
     fp16 and bf16 can share the same captured scalars. The class is not a
-    scalar or a callable, so it has to be recorded on the type branch.
+    scalar or a function object, so it has to be recorded on the type branch.
     """
 
     def vals(dtype):
@@ -454,7 +454,8 @@ def test_nested_kernel_captured_dtype_splits_manager_key(tmp_path, monkeypatch):
     ``_original_func`` into the kernel closure. If that walk used the rewritten
     ``_func`` and dropped the freevar, the helper test would still pass.
     """
-    monkeypatch.setenv("FLYDSL_RUNTIME_ENABLE_CACHE", "0")
+    monkeypatch.setenv("FLYDSL_RUNTIME_ENABLE_CACHE", "1")
+    monkeypatch.setenv("FLYDSL_RUNTIME_CACHE_DIR", str(tmp_path / "cache"))
     monkeypatch.setattr(jit_function, "_flydsl_key", lambda: "test-flydsl-key")
     mod = _load_mod(
         tmp_path,
