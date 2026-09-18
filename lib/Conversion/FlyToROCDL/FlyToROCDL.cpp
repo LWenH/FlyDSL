@@ -659,13 +659,14 @@ public:
     Type resultTy = hasResult ? op.getResult(0).getType() : Type{};
     Type dstTy = op.getDst() ? op.getDst().getType() : Type{};
 
-    // Atom-call conversion promotes operands independently. Even an SSA-form
-    // copy can retain a memref predicate when only src/dst were promoted.
-    // Normalize it here so every SSA emitter receives a scalar i1 condition.
+    // SSA-form copies may retain a register memref predicate. Normalize it
+    // here so every SSA emitter receives a scalar i1 condition.
     if (pred) {
       if (auto predMemTy = dyn_cast<fly::MemRefType>(op.getPred().getType())) {
-        if (!predMemTy.getElemTy().isInteger(1) || !isa<LLVM::LLVMPointerType>(pred.getType()))
-          return op.emitOpError("expected an i1 memref predicate with a lowered LLVM pointer");
+        if (!isGenericAddressSpace<AddressSpace::Register>(predMemTy.getAddressSpace()) ||
+            !predMemTy.getElemTy().isInteger(1) || !isa<LLVM::LLVMPointerType>(pred.getType()))
+          return op.emitOpError(
+              "expected an i1 register memref predicate with a lowered LLVM pointer");
         auto predPtr = applySwizzleOnPtr(
             rewriter, loc, cast<TypedValue<LLVM::LLVMPointerType>>(pred), predMemTy.getSwizzle());
         pred = LLVM::LoadOp::create(rewriter, loc, rewriter.getI1Type(), predPtr);
