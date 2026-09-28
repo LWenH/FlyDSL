@@ -1,8 +1,23 @@
 {
  "schema": 1,
- "updated": "2026-09-28T05:22:33Z",
+ "updated": "2026-09-28T13:52:33Z",
  "repo": "LWenH/FlyDSL",
  "runs": [
+  {
+   "run_id": 36385474618,
+   "pr": null,
+   "commit": "c4169a7878b515d4de074b3535a19bab311eb075",
+   "branch": "main",
+   "event": "push",
+   "title": "[Fix][gfx1250] Time the TDM multicast-add benchmark on the device (#1\u2026",
+   "status": "queued",
+   "conclusion": null,
+   "url": "https://github.com/LWenH/FlyDSL/actions/runs/36385474618",
+   "created_at": "2026-09-28T06:14:30Z",
+   "updated_at": "2026-09-28T06:15:09Z",
+   "actor": "LWenH",
+   "jobs": []
+  },
   {
    "run_id": 35705432405,
    "pr": null,
